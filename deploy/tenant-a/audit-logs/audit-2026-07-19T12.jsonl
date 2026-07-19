@@ -1,0 +1,7 @@
+{"timestamp":"2026-07-19T12:11:29.943Z","createdAt":"2026-07-19T12:11:31.945Z","eventType":"agent_permission_updated","payload":{"name":"accountant","identityType":"consumers","addedServers":[],"removedServers":["erp"]}}
+{"timestamp":"2026-07-19T12:47:05.939Z","createdAt":"2026-07-19T12:47:07.095Z","eventType":"agent_permission_updated","payload":{"name":"accountant","identityType":"consumers","addedServers":["erp"],"removedServers":[]}}
+{"timestamp":"2026-07-19T12:47:28.291Z","createdAt":"2026-07-19T12:47:32.095Z","eventType":"tool_used","payload":{"toolName":"sales_summary","targetServerName":"erp","args":{"from":"2025-01-01","to":"2025-01-31"},"consumerTag":"accountant"}}
+{"timestamp":"2026-07-19T12:47:49.798Z","createdAt":"2026-07-19T12:47:52.098Z","eventType":"tool_used","payload":{"toolName":"sales_summary","targetServerName":"erp","args":{"from":"2025-01-01","to":"2025-05-15"},"consumerTag":"accountant"}}
+{"timestamp":"2026-07-19T12:48:11.640Z","createdAt":"2026-07-19T12:48:12.102Z","eventType":"tool_used","payload":{"toolName":"dashboard_kpis","targetServerName":"erp","args":{},"consumerTag":"accountant"}}
+{"timestamp":"2026-07-19T12:48:31.080Z","createdAt":"2026-07-19T12:48:32.098Z","eventType":"tool_used","payload":{"toolName":"top_products","targetServerName":"erp","args":{"limit":10},"consumerTag":"accountant"}}
+{"timestamp":"2026-07-19T12:58:03.345Z","createdAt":"2026-07-19T12:58:07.109Z","eventType":"tool_used","payload":{"toolName":"list_branches","targetServerName":"erp","args":{},"consumerTag":"ADMIN"}}

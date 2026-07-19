@@ -13,7 +13,7 @@ import { Services } from "../services/services.js";
 import { buildAdminRouter } from "./admin.js";
 import { buildAuthMcpxRouter } from "./auth-mcpx.js";
 import { buildIdentityRouter } from "./identity.js";
-import { buildApiKeyGuard } from "./auth.js";
+import { buildApiKeyGuard, noOpAuthGuard } from "./auth.js";
 import { buildControlPlaneAppConfigRouter } from "./control-plane-app-config.js";
 import { buildControlPlaneRouter } from "./control-plane.js";
 import { makeHubConnectionGuard } from "./hub-connection-guard.js";
@@ -74,6 +74,11 @@ export async function buildMcpxServer(
   });
 
   const authGuard = buildApiKeyGuard(config, logger, env.AUTH_KEY);
+  // Guard ONLY the /mcp data path with the client API key. The control-plane /
+  // UI routers (admin, identity, control-plane, config, catalog, skills) must
+  // stay open so the OSS control-plane UI can read/write config — it has no way
+  // to present the key. Protect those by keeping :9000 operator-local instead.
+  const controlPlaneGuard = noOpAuthGuard;
 
   // OAuth endpoints (public - no auth guard needed)
   app.use(
@@ -109,15 +114,15 @@ export async function buildMcpxServer(
   app.use(
     "/admin",
     buildAdminRouter(
-      authGuard,
+      controlPlaneGuard,
       services,
       logger.child({ component: "AdminRouter" }),
     ),
   );
-  app.use("/identity", buildIdentityRouter(authGuard, services));
+  app.use("/identity", buildIdentityRouter(controlPlaneGuard, services));
   app.use(
     buildControlPlaneRouter(
-      authGuard,
+      controlPlaneGuard,
       services,
       logger.child({ component: "ControlPlaneRouter" }),
     ),
@@ -125,7 +130,7 @@ export async function buildMcpxServer(
   app.use(
     "/config",
     buildControlPlaneAppConfigRouter(
-      authGuard,
+      controlPlaneGuard,
       services,
       logger.child({ component: "ControlPlaneAppConfigRouter" }),
     ),
@@ -133,7 +138,7 @@ export async function buildMcpxServer(
   app.use(
     "/catalog",
     buildCatalogRouter(
-      authGuard,
+      controlPlaneGuard,
       services,
       logger.child({ component: "CatalogRouter" }),
     ),
@@ -141,7 +146,7 @@ export async function buildMcpxServer(
   app.use(
     "/skills",
     buildSkillsRouter(
-      authGuard,
+      controlPlaneGuard,
       services,
       logger.child({ component: "SkillsRouter" }),
     ),

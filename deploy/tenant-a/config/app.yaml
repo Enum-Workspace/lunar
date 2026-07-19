@@ -1,0 +1,46 @@
+permissions:
+  default:
+    _type: default-block
+    allow: []
+  consumers:
+    ADMIN:
+      block: []
+    USER:
+      _type: default-block
+      allow:
+        - finance-reads
+    accountant:
+      _type: default-block
+      consumerGroupKey: accountant Profile
+      allow:
+        - finance-reads
+    marketing:
+      _type: default-block
+      allow:
+        - marketing-reads
+  clientNames: {}
+toolGroups:
+  - name: finance-reads
+    description: Financial and sales analytics
+    services:
+      erp:
+        - dashboard_kpis
+        - sales_summary
+        - top_products
+        - whats_my_role
+  - name: marketing-reads
+    description: Product performance and reference data
+    services:
+      erp:
+        - top_products
+        - list_branches
+        - list_warehouses
+        - whats_my_role
+auth:
+  enabled: true
+  header: x-lunar-api-key
+toolExtensions:
+  services: {}
+targetServerAttributes: {}
+skills:
+  enabled: []

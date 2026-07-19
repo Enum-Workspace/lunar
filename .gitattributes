@@ -1,0 +1,3 @@
+# Keep shell scripts LF so Linux containers can exec them (Windows clones
+# otherwise rewrite them to CRLF, breaking the shebang: "no such file or directory").
+*.sh text eol=lf

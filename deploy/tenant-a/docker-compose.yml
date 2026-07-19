@@ -1,0 +1,24 @@
+# One MCPX instance per tenant. Copy this folder per tenant (tenant-b, ...),
+# change ports + secrets, and point mcp.json at that tenant's erp-mcp.
+services:
+  mcpx:
+    build:
+      context: ../../mcpx
+      dockerfile: Dockerfile
+      target: mcpx
+    container_name: mcpx-tenant-a
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "9000:9000"   # MCPX server (LibreChat connects here at /mcp)
+      - "5273:5173"   # Control-plane UI (optional) — host 5273 -> container 5173
+      - "3001:3000"   # Prometheus metrics (optional) — host 3001 -> container 3000
+    volumes:
+      - ./config:/mcpx/config
+      # Persist audit logs to the host. Path must match the server's cwd
+      # (/lunar/packages/mcpx-server) + "audit-logs" — the AUDIT_LOG_DIR default.
+      - ./audit-logs:/lunar/packages/mcpx-server/audit-logs
+    # host.docker.internal lets the container reach erp-mcp running on the host
+    # (Docker Desktop provides it automatically; on Linux the line below adds it).
+    extra_hosts:
+      - "host.docker.internal:host-gateway"

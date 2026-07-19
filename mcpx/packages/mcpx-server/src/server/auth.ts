@@ -43,7 +43,10 @@ export function buildApiKeyGuard(
 
     if (!supplied) {
       logger.warn("API key not provided in headers, will not allow connection");
-      res.status(401).send("Unauthorized: API key required");
+      // Use 403, not 401: MCP clients (e.g. LibreChat) treat any 401 from an MCP
+      // server as an OAuth challenge and spiral into a failing OAuth flow. 403 is
+      // a plain "forbidden" that enforces the key without triggering OAuth.
+      res.status(403).send("Forbidden: API key required");
       return;
     }
 

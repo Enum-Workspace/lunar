@@ -1,0 +1,2 @@
+# Never commit tenant secrets
+.env
