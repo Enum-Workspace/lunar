@@ -1,0 +1,2 @@
+{"timestamp":"2026-07-20T17:32:59.337Z","createdAt":"2026-07-20T17:33:00.577Z","eventType":"agent_permission_updated","payload":{"name":"sales","identityType":"consumers","addedServers":["erp"],"removedServers":[]}}
+{"timestamp":"2026-07-20T17:38:10.281Z","createdAt":"2026-07-20T17:38:13.787Z","eventType":"agent_permission_updated","payload":{"name":"hr","identityType":"consumers","addedServers":["erp"],"removedServers":[]}}

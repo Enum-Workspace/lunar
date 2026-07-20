@@ -95,8 +95,8 @@ export declare const upsertSkillRequestSchema: z.ZodObject<{
 }, z.core.$strip>;
 export type UpsertSkillRequest = z.input<typeof upsertSkillRequestSchema>;
 export declare const updateSkillDetailsRequestSchema: z.ZodObject<{
-    name: z.ZodString;
     description: z.ZodString;
+    name: z.ZodString;
     body: z.ZodString;
     exposeAsPrompt: z.ZodDefault<z.ZodBoolean>;
 }, z.core.$strip>;

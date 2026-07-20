@@ -8,3 +8,4 @@ export * from "./saved-setups.js";
 export * from "./admin-schemas.js";
 export * from "./audit-log.js";
 export * from "./skill.js";
+export * from "./idp.js";

@@ -175,13 +175,13 @@ export declare const savedSetupItemSchema: z.ZodObject<{
     savedAt: z.ZodString;
     targetServers: z.ZodRecord<z.ZodString, z.ZodObject<{
         initiation: z.ZodUnion<readonly [z.ZodObject<{
-            type: z.ZodDefault<z.ZodLiteral<"stdio">>;
             command: z.ZodEnum<{
                 npx: "npx";
                 uvx: "uvx";
                 docker: "docker";
                 node: "node";
             }>;
+            type: z.ZodDefault<z.ZodLiteral<"stdio">>;
             args: z.ZodDefault<z.ZodArray<z.ZodString>>;
             env: z.ZodDefault<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<readonly [z.ZodString, z.ZodObject<{
                 fromEnv: z.ZodString;
@@ -192,9 +192,9 @@ export declare const savedSetupItemSchema: z.ZodObject<{
             catalogItemId: z.ZodOptional<z.ZodString>;
         }, z.core.$strict>, z.ZodObject<{
             type: z.ZodLiteral<"sse">;
-            url: z.ZodString;
             icon: z.ZodOptional<z.ZodString>;
             catalogItemId: z.ZodOptional<z.ZodString>;
+            url: z.ZodString;
             headers: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<readonly [z.ZodString, z.ZodObject<{
                 fromEnv: z.ZodString;
             }, z.core.$strip>, z.ZodObject<{
@@ -202,9 +202,9 @@ export declare const savedSetupItemSchema: z.ZodObject<{
             }, z.core.$strip>, z.ZodNull]>>>;
         }, z.core.$strip>, z.ZodObject<{
             type: z.ZodLiteral<"streamable-http">;
-            url: z.ZodString;
             icon: z.ZodOptional<z.ZodString>;
             catalogItemId: z.ZodOptional<z.ZodString>;
+            url: z.ZodString;
             headers: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<readonly [z.ZodString, z.ZodObject<{
                 fromEnv: z.ZodString;
             }, z.core.$strip>, z.ZodObject<{
@@ -387,13 +387,13 @@ export declare const listSavedSetupsResponseSchema: z.ZodObject<{
         savedAt: z.ZodString;
         targetServers: z.ZodRecord<z.ZodString, z.ZodObject<{
             initiation: z.ZodUnion<readonly [z.ZodObject<{
-                type: z.ZodDefault<z.ZodLiteral<"stdio">>;
                 command: z.ZodEnum<{
                     npx: "npx";
                     uvx: "uvx";
                     docker: "docker";
                     node: "node";
                 }>;
+                type: z.ZodDefault<z.ZodLiteral<"stdio">>;
                 args: z.ZodDefault<z.ZodArray<z.ZodString>>;
                 env: z.ZodDefault<z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<readonly [z.ZodString, z.ZodObject<{
                     fromEnv: z.ZodString;
@@ -404,9 +404,9 @@ export declare const listSavedSetupsResponseSchema: z.ZodObject<{
                 catalogItemId: z.ZodOptional<z.ZodString>;
             }, z.core.$strict>, z.ZodObject<{
                 type: z.ZodLiteral<"sse">;
-                url: z.ZodString;
                 icon: z.ZodOptional<z.ZodString>;
                 catalogItemId: z.ZodOptional<z.ZodString>;
+                url: z.ZodString;
                 headers: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<readonly [z.ZodString, z.ZodObject<{
                     fromEnv: z.ZodString;
                 }, z.core.$strip>, z.ZodObject<{
@@ -414,9 +414,9 @@ export declare const listSavedSetupsResponseSchema: z.ZodObject<{
                 }, z.core.$strip>, z.ZodNull]>>>;
             }, z.core.$strip>, z.ZodObject<{
                 type: z.ZodLiteral<"streamable-http">;
-                url: z.ZodString;
                 icon: z.ZodOptional<z.ZodString>;
                 catalogItemId: z.ZodOptional<z.ZodString>;
+                url: z.ZodString;
                 headers: z.ZodOptional<z.ZodRecord<z.ZodString, z.ZodUnion<readonly [z.ZodString, z.ZodObject<{
                     fromEnv: z.ZodString;
                 }, z.core.$strip>, z.ZodObject<{

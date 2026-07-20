@@ -13,6 +13,7 @@ export const routes = {
   skillCapabilities: "/skills/:id/capabilities",
   skillAgents: "/skills/:id/agents",
   tools: "/tools",
+  identity: "/identity",
   catalog: "/catalog",
   mcpRegistry: "/mcp-registry",
   savedSetups: "/saved-setups",

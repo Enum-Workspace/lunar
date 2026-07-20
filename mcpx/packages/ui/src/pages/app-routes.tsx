@@ -19,6 +19,7 @@ import SkillEditor from "@/pages/SkillEditor";
 import McpServerAdd from "@/pages/McpServerAdd";
 import NotFound from "@/pages/NotFound";
 import Capabilities from "@/pages/Capabilities";
+import Identity from "@/pages/Identity";
 import { LoginRoute, LogoutRoute } from "@/pages/Login";
 import {
   AuthenticatedLayoutRoute,
@@ -56,6 +57,7 @@ export function createAppRoutes() {
           </>
         ) : null}
         <Route path={routes.tools} element={<Tools />} />
+        <Route path={routes.identity} element={<Identity />} />
         <Route path={routes.catalog} element={<Catalog />} />
         <Route path={routes.mcpRegistry} element={<McpRegistry />} />
         <Route path={routes.savedSetups} element={<SavedSetups />} />

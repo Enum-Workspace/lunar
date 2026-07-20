@@ -173,6 +173,7 @@ const sidebarRouteMatches: Array<{ path: string; id: string }> = [
   { path: routes.mcpRegistry, id: "mcp-registry" },
   { path: routes.mcpServers, id: "mcp-servers" },
   { path: routes.tools, id: "tools" },
+  { path: routes.identity, id: "identity" },
   { path: routes.capabilities, id: "capabilities" },
   { path: routes.skills, id: "skills" },
   { path: routes.savedSetups, id: "saved-setups" },

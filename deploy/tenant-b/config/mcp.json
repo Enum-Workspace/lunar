@@ -1,0 +1,11 @@
+{
+  "mcpServers": {
+    "erp": {
+      "type": "streamable-http",
+      "url": "http://host.docker.internal:3939/mcp",
+      "headers": {
+        "x-mcp-gateway-secret": { "fromEnv": "GATEWAY_SHARED_SECRET" }
+      }
+    }
+  }
+}

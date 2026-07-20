@@ -21,6 +21,7 @@ import { buildControlPlaneRouter } from "./control-plane.js";
 import { makeHubConnectionGuard } from "./hub-connection-guard.js";
 import { buildOAuthRouter } from "./oauth-router.js";
 import { buildCatalogRouter } from "./catalog.js";
+import { buildIdpRouter } from "./idp.js";
 import { buildDownstreamTransportsRouter } from "./downstream-transports.js";
 import { buildSkillsRouter } from "./skills.js";
 import { bindUIWebsocket } from "./ws-ui.js";
@@ -147,6 +148,16 @@ export async function buildMcpxServer(
       controlPlaneGuard,
       services,
       logger.child({ component: "ControlPlaneAppConfigRouter" }),
+    ),
+  );
+  // LOCAL FORK PATCH (IdP management UI): Keycloak user/group management for
+  // the Identity page. Control-plane trust model (operator-local :9000).
+  app.use(
+    "/idp",
+    buildIdpRouter(
+      controlPlaneGuard,
+      services,
+      logger.child({ component: "IdpRouter" }),
     ),
   );
   app.use(

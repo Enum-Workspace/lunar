@@ -26,6 +26,15 @@ export class FailedToConnectToTargetServer extends Error {
     this.name = "FailedToConnectToTargetServer";
   }
 }
+// LOCAL FORK PATCH (IdP management UI): the IdP (Keycloak) admin API could
+// not be reached or refused our credentials — routed to HTTP 503.
+export class IdpUnavailableError extends Error {
+  constructor(message = "IdP is unreachable") {
+    super(message);
+    this.name = "IdpUnavailableError";
+  }
+}
+
 export class InvalidConfigError extends Error {
   constructor(message = "Invalid configuration") {
     super(message);

@@ -1,0 +1,47 @@
+# Tenant B — second MCPX instance. Same downstream erp-mcp as tenant A, its
+# own Keycloak realm + Neon branch, and the new Identity (Keycloak admin) UI.
+# Tenant A is untouched by this stack.
+services:
+  # Per-tenant IdP. Realm imported from ./keycloak on first start (empty DB).
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.3
+    container_name: keycloak-tenant-b
+    restart: unless-stopped
+    command: ["start", "--import-realm"]
+    environment:
+      # Neon-managed Postgres (fresh branch; values in .env).
+      KC_DB: postgres
+      KC_DB_URL: ${KC_DB_URL}
+      KC_DB_USERNAME: ${KC_DB_USERNAME}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+      # ONE issuer URL reachable from browser + containers: the host's stable
+      # Tailscale IP (see tenant-a HOW-TO-USE for the rationale).
+      KC_HOSTNAME: http://100.88.11.69:8081
+      KC_HTTP_ENABLED: "true"
+      KC_HEALTH_ENABLED: "true"
+    ports:
+      - "8081:8080"   # Keycloak (admin console + OIDC endpoints)
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
+  mcpx:
+    build:
+      context: ../../mcpx
+      dockerfile: Dockerfile
+      target: mcpx
+    container_name: mcpx-tenant-b
+    restart: unless-stopped
+    env_file: .env
+    ports:
+      - "9000:9000"   # MCPX server (LibreChat/clients connect here at /mcp)
+      - "5273:5173"   # Control-plane UI (Identity page lives here)
+      - "3001:3000"   # Prometheus metrics (optional)
+    volumes:
+      - ./config:/mcpx/config
+      - ./audit-logs:/lunar/packages/mcpx-server/audit-logs
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
