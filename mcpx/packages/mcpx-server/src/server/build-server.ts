@@ -14,6 +14,8 @@ import { buildAdminRouter } from "./admin.js";
 import { buildAuthMcpxRouter } from "./auth-mcpx.js";
 import { buildIdentityRouter } from "./identity.js";
 import { buildApiKeyGuard, noOpAuthGuard } from "./auth.js";
+import { buildOidcGuard } from "./oidc-auth.js";
+import { buildWellKnownRouter } from "./well-known-router.js";
 import { buildControlPlaneAppConfigRouter } from "./control-plane-app-config.js";
 import { buildControlPlaneRouter } from "./control-plane.js";
 import { makeHubConnectionGuard } from "./hub-connection-guard.js";
@@ -73,12 +75,24 @@ export async function buildMcpxServer(
     res.send({ status: "OK" });
   });
 
-  const authGuard = buildApiKeyGuard(config, logger, env.AUTH_KEY);
-  // Guard ONLY the /mcp data path with the client API key. The control-plane /
-  // UI routers (admin, identity, control-plane, config, catalog, skills) must
-  // stay open so the OSS control-plane UI can read/write config — it has no way
-  // to present the key. Protect those by keeping :9000 operator-local instead.
+  // LOCAL FORK PATCH (OIDC inbound auth): auth.mode selects how the /mcp data
+  // path is guarded — IdP-issued Bearer JWTs (oidc) or the static API key
+  // (apikey, default). Mode changes require a restart, same as `enabled`.
+  const authConfig = config.getConfig().auth;
+  const useOidc = Boolean(authConfig?.enabled) && authConfig?.mode === "oidc";
+  const authGuard = useOidc
+    ? buildOidcGuard(config, logger.child({ component: "OidcAuthGuard" }))
+    : buildApiKeyGuard(config, logger, env.AUTH_KEY);
+  // Guard ONLY the /mcp data path. The control-plane / UI routers (admin,
+  // identity, control-plane, config, catalog, skills) must stay open so the
+  // OSS control-plane UI can read/write config — it has no way to present
+  // credentials. Protect those by keeping :9000 operator-local instead.
   const controlPlaneGuard = noOpAuthGuard;
+
+  // OAuth protected-resource discovery (public - no auth guard needed)
+  if (useOidc && authConfig.oidc) {
+    app.use(buildWellKnownRouter(authConfig.oidc));
+  }
 
   // OAuth endpoints (public - no auth guard needed)
   app.use(

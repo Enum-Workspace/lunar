@@ -1,0 +1,4 @@
+{"timestamp":"2026-07-20T06:52:58.304Z","createdAt":"2026-07-20T06:53:01.298Z","eventType":"tool_used","payload":{"toolName":"whats_my_role","targetServerName":"erp","args":{},"consumerTag":"marketing"}}
+{"timestamp":"2026-07-20T06:52:59.810Z","createdAt":"2026-07-20T06:53:01.298Z","eventType":"tool_used","payload":{"toolName":"list_warehouses","targetServerName":"erp","args":{},"consumerTag":"marketing"}}
+{"timestamp":"2026-07-20T06:52:59.814Z","createdAt":"2026-07-20T06:53:01.298Z","eventType":"tool_used","payload":{"toolName":"list_branches","targetServerName":"erp","args":{},"consumerTag":"marketing"}}
+{"timestamp":"2026-07-20T06:52:59.847Z","createdAt":"2026-07-20T06:53:01.298Z","eventType":"tool_used","payload":{"toolName":"top_products","targetServerName":"erp","args":{},"consumerTag":"marketing"}}

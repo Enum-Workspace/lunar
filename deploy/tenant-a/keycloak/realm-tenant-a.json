@@ -1,0 +1,85 @@
+{
+  "realm": "tenant-a",
+  "enabled": true,
+  "sslRequired": "none",
+  "registrationAllowed": false,
+  "loginTheme": "keycloak",
+  "groups": [
+    { "name": "accountant" },
+    { "name": "marketing" }
+  ],
+  "users": [
+    {
+      "username": "fatima",
+      "enabled": true,
+      "firstName": "Fatima",
+      "lastName": "Accountant",
+      "email": "fatima@tenant-a.local",
+      "emailVerified": true,
+      "credentials": [
+        { "type": "password", "value": "fatima123", "temporary": false }
+      ],
+      "realmRoles": ["default-roles-tenant-a"],
+      "groups": ["/accountant"]
+    },
+    {
+      "username": "bob",
+      "enabled": true,
+      "firstName": "Bob",
+      "lastName": "Marketing",
+      "email": "bob@tenant-a.local",
+      "emailVerified": true,
+      "credentials": [
+        { "type": "password", "value": "bob123", "temporary": false }
+      ],
+      "realmRoles": ["default-roles-tenant-a"],
+      "groups": ["/marketing"]
+    }
+  ],
+  "clients": [
+    {
+      "clientId": "librechat",
+      "name": "LibreChat MCP connection (tenant A)",
+      "enabled": true,
+      "protocol": "openid-connect",
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": false,
+      "redirectUris": [
+        "http://localhost:3080/api/mcp/erp/oauth/callback"
+      ],
+      "webOrigins": ["http://localhost:3080"],
+      "attributes": {
+        "pkce.code.challenge.method": "S256"
+      },
+      "fullScopeAllowed": true,
+      "protocolMappers": [
+        {
+          "name": "groups",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-group-membership-mapper",
+          "consentRequired": false,
+          "config": {
+            "full.path": "false",
+            "claim.name": "groups",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "name": "mcpx-audience",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-audience-mapper",
+          "consentRequired": false,
+          "config": {
+            "included.custom.audience": "http://host.docker.internal:9000/mcp",
+            "id.token.claim": "false",
+            "access.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -1,6 +1,38 @@
 # One MCPX instance per tenant. Copy this folder per tenant (tenant-b, ...),
 # change ports + secrets, and point mcp.json at that tenant's erp-mcp.
 services:
+  # Per-tenant IdP. Issues the per-user tokens MCPX verifies on /mcp
+  # (auth.mode: oidc in config/app.yaml). Realm is imported from ./keycloak
+  # on first start against an empty DB; existing realms are not overwritten.
+  keycloak:
+    image: quay.io/keycloak/keycloak:26.3
+    container_name: keycloak-tenant-a
+    restart: unless-stopped
+    command: ["start", "--import-realm"]
+    environment:
+      # Neon-managed Postgres (values in .env).
+      KC_DB: postgres
+      KC_DB_URL: ${KC_DB_URL}
+      KC_DB_USERNAME: ${KC_DB_USERNAME}
+      KC_DB_PASSWORD: ${KC_DB_PASSWORD}
+      KC_BOOTSTRAP_ADMIN_USERNAME: ${KC_BOOTSTRAP_ADMIN_USERNAME}
+      KC_BOOTSTRAP_ADMIN_PASSWORD: ${KC_BOOTSTRAP_ADMIN_PASSWORD}
+      # ONE issuer URL that the browser AND the containers can both reach.
+      # We use the host's Tailscale IP (stable, unlike the hotspot LAN IP that
+      # left the Docker `host.docker.internal` hosts entry stale). Verified
+      # reachable from the host browser and from inside containers. If the
+      # Tailscale IP ever changes, update KC_HOSTNAME + app.yaml oidc.issuer to
+      # match. Local dev is plain HTTP; front with TLS in production.
+      KC_HOSTNAME: http://100.88.11.69:8081
+      KC_HTTP_ENABLED: "true"
+      KC_HEALTH_ENABLED: "true"
+    ports:
+      - "8081:8080"   # Keycloak (admin console + OIDC endpoints)
+    volumes:
+      - ./keycloak:/opt/keycloak/data/import:ro
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+
   mcpx:
     build:
       context: ../../mcpx
