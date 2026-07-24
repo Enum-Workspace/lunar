@@ -38,7 +38,16 @@ toolGroups:
         - whats_my_role
 auth:
   enabled: true
+  mode: oidc
   header: x-lunar-api-key
+  oidc:
+    # Issuer = Keycloak's browser+container-reachable Tailscale URL (must match
+    # KC_HOSTNAME). audience/resource are just identifiers (they need to match
+    # the token's aud, not be reachable), so they stay on the container name.
+    issuer: http://100.88.11.69:8081/realms/tenant-a
+    audience: http://host.docker.internal:9000/mcp
+    rolesClaim: groups
+    resource: http://host.docker.internal:9000/mcp
 toolExtensions:
   services: {}
 targetServerAttributes: {}

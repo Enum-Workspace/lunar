@@ -6,6 +6,7 @@ import {
   ScrollText,
   Server,
   SlidersHorizontal,
+  Users,
   Zap,
 } from "lucide-react";
 import {
@@ -30,6 +31,8 @@ export function getDefaultMcpxSidebarSections(): McpxSidebarSection[] {
     },
     { id: "catalog", label: "Catalog", icon: Library, url: routes.catalog },
     { id: "tools", label: "Tools", icon: Hammer, url: routes.tools },
+    // LOCAL FORK PATCH (IdP management UI)
+    { id: "identity", label: "Identity", icon: Users, url: routes.identity },
   ];
 
   if (isCapabilitiesEnabled()) {
@@ -86,6 +89,8 @@ function getRestructuredMcpxSidebarSections(): McpxSidebarSection[] {
       icon: Server,
       url: routes.mcpServers,
     },
+    // LOCAL FORK PATCH (IdP management UI)
+    { id: "identity", label: "Identity", icon: Users, url: routes.identity },
   ];
 
   if (isSkillsPageEnabled()) {

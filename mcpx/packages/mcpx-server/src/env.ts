@@ -153,6 +153,11 @@ const envSchema = z
       .string()
       .optional()
       .describe("JWT audience injected into hosted MCP server child processes"),
+    // LOCAL FORK PATCH (IdP management UI): service-account client MCPX uses
+    // to call the Keycloak Admin API for the /idp control-plane endpoints.
+    // The feature is disabled unless the secret is set (and auth.mode=oidc).
+    KEYCLOAK_ADMIN_CLIENT_ID: z.string().default("mcpx-admin"),
+    KEYCLOAK_ADMIN_CLIENT_SECRET: z.string().optional(),
   })
   // Add synthetic env variables:
   .transform((parsed) => ({
@@ -221,6 +226,8 @@ const NON_SECRET_KEYS = [
   "MCPX_AUTH_JWKS_URI",
   "MCPX_AUTH_JWT_ISSUER",
   "MCPX_AUTH_JWT_AUDIENCE",
+  // KEYCLOAK_ADMIN_CLIENT_SECRET deliberately absent — it must stay redacted.
+  "KEYCLOAK_ADMIN_CLIENT_ID",
 ] as const;
 
 export const { env, getEnv, resetEnv, redactEnv } = createEnv(

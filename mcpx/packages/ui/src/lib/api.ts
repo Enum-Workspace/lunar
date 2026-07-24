@@ -25,6 +25,14 @@ import type {
   SkillDraft,
   EnabledSkills,
   ScopeSubject,
+  IdpStatus,
+  IdpUser,
+  IdpGroup,
+  CreateIdpUserRequest,
+  UpdateIdpUserRequest,
+  SetIdpUserGroupRequest,
+  ResetIdpPasswordRequest,
+  CreateIdpGroupRequest,
 } from "@mcpx/shared-model";
 import {
   singleToolGroupSchema,
@@ -43,6 +51,11 @@ import {
   skillCatalogResponseSchema,
   skillSchema,
   enabledSkillsResponseSchema,
+  idpStatusSchema,
+  idpUserSchema,
+  idpGroupSchema,
+  getIdpUsersResponseSchema,
+  getIdpGroupsResponseSchema,
 } from "@mcpx/shared-model";
 import z from "zod/v4";
 import { getAdminWebserverURL, getMcpxServerURL } from "@/config/api-config";
@@ -762,6 +775,75 @@ class ApiClient {
     if (!response.ok) {
       throw await getApiError(response);
     }
+  }
+
+  // ==================== IDP (Identity page) ====================
+  // LOCAL FORK PATCH (IdP management UI)
+
+  async getIdpStatus(): Promise<IdpStatus> {
+    return this.request("/idp/status", idpStatusSchema);
+  }
+
+  async getIdpUsers(): Promise<IdpUser[]> {
+    return this.request("/idp/users", getIdpUsersResponseSchema);
+  }
+
+  async createIdpUser(body: CreateIdpUserRequest): Promise<IdpUser> {
+    return this.requestWithBody("/idp/users", "POST", body, idpUserSchema);
+  }
+
+  async updateIdpUser(
+    id: string,
+    body: UpdateIdpUserRequest,
+  ): Promise<IdpUser> {
+    return this.requestWithBody(
+      `/idp/users/${encodeURIComponent(id)}`,
+      "PATCH",
+      body,
+      idpUserSchema,
+    );
+  }
+
+  async setIdpUserGroup(
+    id: string,
+    body: SetIdpUserGroupRequest,
+  ): Promise<IdpUser> {
+    return this.requestWithBody(
+      `/idp/users/${encodeURIComponent(id)}/group`,
+      "PUT",
+      body,
+      idpUserSchema,
+    );
+  }
+
+  async resetIdpUserPassword(
+    id: string,
+    body: ResetIdpPasswordRequest,
+  ): Promise<MessageResponse> {
+    return this.requestWithBody(
+      `/idp/users/${encodeURIComponent(id)}/password`,
+      "PUT",
+      body,
+      messageResponseSchema,
+    );
+  }
+
+  async deleteIdpUser(id: string): Promise<void> {
+    const response = await fetch(
+      `${this.baseUrl}/idp/users/${encodeURIComponent(id)}`,
+      { method: "DELETE", credentials: "include" },
+    );
+    if (!response.ok) {
+      throw await getApiError(response);
+    }
+  }
+
+  async getIdpGroups(): Promise<IdpGroup[]> {
+    return this.request("/idp/groups", getIdpGroupsResponseSchema);
+  }
+
+  async createIdpGroup(body: CreateIdpGroupRequest): Promise<IdpGroup> {
+    return this.requestWithBody("/idp/groups", "POST", body, idpGroupSchema);
   }
 }
 

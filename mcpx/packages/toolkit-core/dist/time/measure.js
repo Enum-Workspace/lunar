@@ -1,0 +1,25 @@
+import { makeError } from "../data/index.js";
+// This function measures the execution time of an asynchronous function
+// and returns a Measurement object containing the duration, success status,
+// and either the result or an error.
+// It is non-failable, meaning it will always return a Measurement object.
+export async function measureNonFailable(f) {
+    const start = performance.now();
+    try {
+        const result = await f();
+        return {
+            duration: performance.now() - start,
+            success: true,
+            result,
+        };
+    }
+    catch (e) {
+        const error = makeError(e);
+        return {
+            duration: performance.now() - start,
+            success: false,
+            error,
+        };
+    }
+}
+//# sourceMappingURL=measure.js.map

@@ -7,6 +7,7 @@ import { env } from "../env.js";
 import { OAuthSessionManager } from "../server/oauth-session-manager.js";
 import { ExtendedClientBuilder } from "./client-extension.js";
 import { ControlPlaneService } from "./control-plane-service.js";
+import { KeycloakAdminService } from "./keycloak-admin.js";
 import { MetricRecorder } from "./metrics.js";
 import { OAuthConnectionHandler } from "./oauth-connection-handler.js";
 import { PermissionManager } from "./permissions.js";
@@ -67,6 +68,7 @@ export class Services {
   private _config: ConfigService;
   private _auditLogService: AuditLogService;
   private _connections: UIConnections;
+  private _keycloakAdmin: KeycloakAdminService;
   private _setupManager: SetupManager;
   private _catalogManager: CatalogManager;
   private _identityService: IdentityService;
@@ -298,6 +300,13 @@ export class Services {
       capabilityRegistry,
     );
 
+    // LOCAL FORK PATCH (IdP management UI): Keycloak Admin API client for
+    // the /idp control-plane endpoints. Stateless besides its token cache.
+    this._keycloakAdmin = new KeycloakAdminService(
+      config,
+      logger.child({ component: "KeycloakAdminService" }),
+    );
+
     this.logger = logger;
     startupLogger.info("Services constructed");
   }
@@ -525,6 +534,11 @@ export class Services {
   get identityService(): IdentityService {
     this.ensureInitialized();
     return this._identityService;
+  }
+
+  get keycloakAdmin(): KeycloakAdminService {
+    this.ensureInitialized();
+    return this._keycloakAdmin;
   }
 
   get config(): ConfigService {
